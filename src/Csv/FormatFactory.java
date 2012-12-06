@@ -14,7 +14,7 @@ public class FormatFactory {
 		if ("R".equals(name))
 			return new RFormat();
 
-		throw new Exception("Impossible de créer un " + name);
+		throw new Exception("Error : " + name + " is not a correct file formator is not supported.");
 	}
-
+	
 }

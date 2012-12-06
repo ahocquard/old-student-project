@@ -9,6 +9,12 @@ public class RFormat implements Format {
 		return datas;
 	}
 
+	@Override
+	public String encoding() {
+		return "UTF-8";
+	}
+
+	
 }
 
 //public static TreeMap<String, List<String>> inversionMatrix(

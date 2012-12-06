@@ -11,7 +11,7 @@ public class DissimilarityFactory {
 	    if ("cosinus".equals(name))
 	      return new Cosinus();
 	 
-	    throw new Exception("Impossible de créer un " + name);
+	    throw new Exception("This distance is not implemented : " + name);
 	  }
 
 }

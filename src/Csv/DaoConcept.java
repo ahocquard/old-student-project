@@ -1,19 +1,19 @@
 package Csv;
-import java.io.DataOutputStream;
+import java.io.BufferedWriter;
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
-import java.io.FileReader;
-import java.io.FileWriter;
 import java.io.IOException;
+import java.io.InputStreamReader;
+import java.io.OutputStreamWriter;
+import java.io.Reader;
+import java.io.Writer;
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.Collections;
-import java.util.Comparator;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.TreeMap;
 
 import Execution.Word;
 import au.com.bytecode.opencsv.CSVParser;
@@ -28,6 +28,8 @@ public class DaoConcept {
 //	private final static String CORPUS_FILE_NAME = "cc_sb.csv";
 //	private final static String CORPUS_FILE_NAME = "extrait.csv";
 	private final static String CORPUS_FILE_NAME = "instances-creme.csv";
+//	private final static String CORPUS_FILE_NAME = "test.csv";
+
 
 
 	/**
@@ -52,11 +54,11 @@ public class DaoConcept {
 		Map<String, List<Word>> concepts = new HashMap<String, List<Word>>();
 
 		File file = new File(RESOURCES_PATH + CORPUS_FILE_NAME);
-		FileReader fr = null;
+		Reader fr = null;
 		CSVReader csvReader = null;
 
 		try {
-			fr = new FileReader(file);
+			fr = new InputStreamReader(new FileInputStream(file), "UTF-8");
 			// important : specify null character for quote
 			csvReader = new CSVReader(fr, separator, CSVParser.NULL_CHARACTER);
 
@@ -119,11 +121,13 @@ public class DaoConcept {
 
 
 	public static void writeConcepts(String filename, List<String[]> datas){
-		FileWriter fw = null;
+		Writer fw = null;
 		CSVWriter csvWriter = null;
 
 		try {
-			fw = new FileWriter(RESOURCES_PATH + CORPUS_FILE_NAME + ".tab");
+			fw = new BufferedWriter(new OutputStreamWriter(
+				    new FileOutputStream(RESOURCES_PATH + CORPUS_FILE_NAME + ".tab"), "UTF-8"));
+			//fw = new FileWriter(RESOURCES_PATH + CORPUS_FILE_NAME + ".tab");
 			// important : specify null character for quote
 			csvWriter = new CSVWriter(fw, '\t', CSVWriter.NO_QUOTE_CHARACTER);
 			csvWriter.writeAll(datas);

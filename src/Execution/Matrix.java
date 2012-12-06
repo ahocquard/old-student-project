@@ -13,16 +13,22 @@ import Dissimilarity.Jaccard;
 
 public class Matrix {
 
-	
+	// TODO : corriger les phrases 
 	/**
-	 * @param args
+	 * @param args args[0] is the name of the dissimilarity selected. It could be "jaccard" or "cosinus".
+	 * args[1] is the precision. It's the maximum value of the dissimilarity.
+	 * args[2] is the number of the best concepts you keep in the dissimilarity matrix. -1 equals all the concepts.
+	 * args[3] is the format of output. It could be "orange" or "R".
+	 * args[4] is the column where is the concept. It's based on 0-index (0 equals "the first column is the concept). Following words are the context. Previous words are ignored.
+	 * args[5] is a boolean to specify whether or not it considers "null" words in the context. 
+	 * 
 	 */
 	public static void main(String[] args) {
-		
+
 		// load arguments
 		Dissimilarity dissimilarity = null;
 		Format fileFormat = null;
-		
+
 		try {
 			dissimilarity = DissimilarityFactory.create(args[0]);
 			fileFormat = FormatFactory.create(args[3]);
@@ -30,38 +36,41 @@ public class Matrix {
 			e.printStackTrace();
 			System.exit(0);
 		}
-		
+
 		int precision = Integer.parseInt(args[1]);
 		int selected = Integer.parseInt(args[2]);
-		
-		
-		
+		int columnConcept = Integer.parseInt(args[4]);
+		boolean nullWord = Boolean.parseBoolean(args[5]);
+
+
 		// load matrix (concatenation)
 		long before = System.currentTimeMillis();
-		List<List<Word>> datas = DaoConcept.loadConcepts();
+		List<List<Word>> datas = DaoConcept.loadConcepts('|', columnConcept, nullWord );
 		System.out.println("load done");
 		System.out.println((System.currentTimeMillis() - before) / 1000.0);
-		
+
 		// compute the matrix dissimilarity
 		Matrix conceptMatrix = new Matrix(dissimilarity, precision, selected);
 		List<String[]> dissMatrix = conceptMatrix.getMatrix(datas);
 		System.out.println("matrix done");
 		System.out.println((System.currentTimeMillis() - before) / 1000.0);
-		
-		// write concepts depending on the format file specified in argument 
-		List<String[]> result = fileFormat.transform(dissMatrix);
-		DaoConcept.writeConcepts("matrix", result);
+
+		// write concepts depending on the format file specified in argument
+		if(fileFormat != null){
+			List<String[]> result = fileFormat.transform(dissMatrix);
+			DaoConcept.writeConcepts("matrix", result);
+		}
 		System.out.println("write done");
-		
-		
+
+
 		System.out.println((System.currentTimeMillis() - before) / 1000.0);
 
 	}
-	
+
 	private int selected;
 	private int precision;
 	private Dissimilarity dissimilarity;
-	
+
 
 	public Matrix(Dissimilarity dissimilarity, int precision, int selected) {
 		this.precision = precision;
@@ -72,7 +81,7 @@ public class Matrix {
 	public Matrix(Dissimilarity dissimilarity, int precision) {
 		this(dissimilarity, precision, -1);
 	}
-	
+
 	public Matrix(Dissimilarity dissimilarity) {
 		this(dissimilarity, 1000, -1);
 	}
@@ -80,20 +89,20 @@ public class Matrix {
 	public Matrix() {
 		this(new Jaccard(), 1000, -1);
 	}
-	
-	
+
+
 	public List<String[]> getMatrix(List<List<Word>> datas){
 
 		String[][] dissimilarities = new String[datas.size()+1][datas.size()+1];
 		dissimilarities[0][0] = "";
-		
+
 		for(int i=0 ; i < datas.size() ; i++)
 			dissimilarities[0][i+1] = datas.get(i).get(0).getValue();
-		
+
 		for(int i=0 ; i < datas.size() ; i++){
 			dissimilarities[i+1][0] = datas.get(i).get(0).getValue();
 			for(int j=0 ; j<i+1 ; j++){
-				Integer dissValue = new Integer(dissimilarity.getValue(datas.get(i), datas.get(j), precision));
+				Double dissValue = new Double(dissimilarity.getValue(datas.get(i), datas.get(j), precision));
 				dissimilarities[i+1][j+1] = dissValue.toString();
 				dissimilarities[j+1][i+1] = dissValue.toString();
 			}
@@ -101,7 +110,7 @@ public class Matrix {
 		return new ArrayList<String[]>(Arrays.asList(dissimilarities));
 	}
 
-	
+
 	public int getPrecision() {
 		return precision;
 	}

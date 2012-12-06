@@ -23,4 +23,11 @@ public class OrangeFormat implements Format{
 		
 		return result;
 	}
+
+	@Override
+	public String encoding() {
+		return "UTF-8";
+	}
+	
+	
 }
