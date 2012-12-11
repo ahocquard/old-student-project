@@ -49,7 +49,7 @@ public class Jaccard implements Dissimilarity {
 //	}
 	
 	@Override
-	public double getValue(List<Word> list1, List<Word> list2, int precision){
+	public double getValue(List<Word> list1, List<Word> list2){
 		double total = 0;
 		double intersection = 0;
 		

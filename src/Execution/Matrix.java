@@ -15,12 +15,11 @@ public class Matrix {
 
 	// TODO : corriger les phrases 
 	/**
-	 * @param args args[0] is the name of the dissimilarity selected. It could be "jaccard" or "cosinus".
-	 * args[1] is the precision. It's the maximum value of the dissimilarity.
-	 * args[2] is the number of the best concepts you keep in the dissimilarity matrix. -1 equals all the concepts.
-	 * args[3] is the format of output. It could be "orange" or "R".
-	 * args[4] is the column where is the concept. It's based on 0-index (0 equals "the first column is the concept). Following words are the context. Previous words are ignored.
-	 * args[5] is a boolean to specify whether or not it considers "null" words in the context. 
+	 * @param args 
+	 * args[0] is the name of the dissimilarity selected. It could be "jaccard" or "cosinus".
+	 * args[1] is the format of output. It could be "orange" or "R".
+	 * args[2] is the column where is the concept. It's based on 0-index (0 equals "the first column is the concept). Following words are the context. Previous words are ignored.
+	 * args[3] is a boolean to specify whether or not it considers "null" words in the context. 
 	 * 
 	 */
 	public static void main(String[] args) {
@@ -31,16 +30,14 @@ public class Matrix {
 
 		try {
 			dissimilarity = DissimilarityFactory.create(args[0]);
-			fileFormat = FormatFactory.create(args[3]);
+			fileFormat = FormatFactory.create(args[1]);
 		} catch (Exception e) {
 			e.printStackTrace();
 			System.exit(0);
 		}
 
-		int precision = Integer.parseInt(args[1]);
-		int selected = Integer.parseInt(args[2]);
-		int columnConcept = Integer.parseInt(args[4]);
-		boolean nullWord = Boolean.parseBoolean(args[5]);
+		int columnConcept = Integer.parseInt(args[2]);
+		boolean nullWord = Boolean.parseBoolean(args[3]);
 
 
 		// load matrix (concatenation)
@@ -50,7 +47,7 @@ public class Matrix {
 		System.out.println((System.currentTimeMillis() - before) / 1000.0);
 
 		// compute the matrix dissimilarity
-		Matrix conceptMatrix = new Matrix(dissimilarity, precision, selected);
+		Matrix conceptMatrix = new Matrix(dissimilarity);
 		List<String[]> dissMatrix = conceptMatrix.getMatrix(datas);
 		System.out.println("matrix done");
 		System.out.println((System.currentTimeMillis() - before) / 1000.0);
@@ -67,27 +64,11 @@ public class Matrix {
 
 	}
 
-	private int selected;
-	private int precision;
 	private Dissimilarity dissimilarity;
 
 
-	public Matrix(Dissimilarity dissimilarity, int precision, int selected) {
-		this.precision = precision;
-		this.dissimilarity = dissimilarity;
-		this.selected = selected;
-	}
-
-	public Matrix(Dissimilarity dissimilarity, int precision) {
-		this(dissimilarity, precision, -1);
-	}
-
 	public Matrix(Dissimilarity dissimilarity) {
-		this(dissimilarity, 1000, -1);
-	}
-
-	public Matrix() {
-		this(new Jaccard(), 1000, -1);
+		this.dissimilarity = dissimilarity;
 	}
 
 
@@ -102,7 +83,7 @@ public class Matrix {
 		for(int i=0 ; i < datas.size() ; i++){
 			dissimilarities[i+1][0] = datas.get(i).get(0).getValue();
 			for(int j=0 ; j<i+1 ; j++){
-				Double dissValue = new Double(dissimilarity.getValue(datas.get(i), datas.get(j), precision));
+				Double dissValue = new Double(dissimilarity.getValue(datas.get(i), datas.get(j)));
 				dissimilarities[i+1][j+1] = dissValue.toString();
 				dissimilarities[j+1][i+1] = dissValue.toString();
 			}
@@ -111,22 +92,6 @@ public class Matrix {
 	}
 
 
-	public int getPrecision() {
-		return precision;
-	}
-
-
-	public void setPrecision(int precision) {
-		this.precision = precision;
-	}
-
-	public int getSelected() {
-		return selected;
-	}
-
-	public void setSelected(int selected) {
-		this.selected = selected;
-	}
 
 	public Dissimilarity getDissimilarity() {
 		return dissimilarity;

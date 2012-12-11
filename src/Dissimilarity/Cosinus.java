@@ -7,7 +7,7 @@ import Execution.Word;
 public class Cosinus implements Dissimilarity {
 
 	@Override
-	public double getValue(List<Word> list1, List<Word> list2, int precision){
+	public double getValue(List<Word> list1, List<Word> list2){
 		double sumSquare1 = 0;
 		double sumSquare2 = 0;
 		double intersection = 0;
