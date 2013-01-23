@@ -1,4 +1,4 @@
-package Dissimilarity;
+package dissimilarity;
 
 
 public class DissimilarityFactory {

@@ -1,8 +1,5 @@
-package Csv;
+package csv;
 
-import Dissimilarity.Cosinus;
-import Dissimilarity.Dissimilarity;
-import Dissimilarity.Jaccard;
 
 public class FormatFactory {
 

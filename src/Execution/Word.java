@@ -1,4 +1,4 @@
-package Execution;
+package execution;
 
 public class Word implements Comparable<Word>{
 
@@ -49,6 +49,12 @@ public class Word implements Comparable<Word>{
 	@Override
 	public int compareTo(Word word) {
 		return this.value.compareTo(word.getValue());
+	}
+
+
+	@Override
+	public int hashCode() {
+		return super.hashCode();
 	}
 
 

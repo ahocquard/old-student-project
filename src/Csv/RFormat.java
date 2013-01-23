@@ -1,4 +1,4 @@
-package Csv;
+package csv;
 
 import java.util.List;
 
@@ -10,8 +10,23 @@ public class RFormat implements Format {
 	}
 
 	@Override
-	public String encoding() {
+	public String getEncoding() {
 		return "UTF-8";
+	}
+
+	@Override
+	public char getSeparator() {
+		return '|';
+	}
+
+	@Override
+	public String getExtension() {
+		return "R";
+	}
+
+	@Override
+	public String getName() {
+		return "R";
 	}
 
 	

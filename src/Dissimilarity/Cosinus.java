@@ -1,6 +1,7 @@
-package Dissimilarity;
+package dissimilarity;
 import java.util.List;
-import Execution.Word;
+
+import execution.Word;
 
 
 
@@ -57,5 +58,12 @@ public class Cosinus implements Dissimilarity {
 		
 		return 1- (intersection / (Math.sqrt(sumSquare1 * sumSquare2)));
 	}
+
+	@Override
+	public String getName() {
+		return "cosinus";
+	}
+	
+	
 
 }
