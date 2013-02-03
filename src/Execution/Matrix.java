@@ -4,7 +4,7 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 
-import clustering.StepClustering;
+import clustering.NeighborClustering;
 import csv.ClusteringFormat;
 import csv.DaoConcept;
 import csv.Format;
@@ -70,7 +70,7 @@ public class Matrix {
 		
 		// STEP CLUSTERING
 		// should be an option in argument : not clean (lack of time)
-		StepClustering neighboorWord = new StepClustering();
+		NeighborClustering neighboorWord = new NeighborClustering();
 		Format clusFormat = new ClusteringFormat();
 		Map<String,List<String[]>> files = neighboorWord.getClusters(clusFormat.transform(dissMatrix));
 		for(Map.Entry<String, List<String[]>> file : files.entrySet()){
